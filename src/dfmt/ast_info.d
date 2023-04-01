@@ -23,6 +23,31 @@ struct BraceIndentInfo
     uint beginIndentLevel;
 }
 
+/// See_Also: https://dlang.org/spec/module.html#import-declaration
+struct ImportInfo
+{
+    size_t startLocation;
+    size_t endLocation;
+    // TODO: Implement this, see https://github.com/dlang-community/dfmt/pull/302/files#diff-eb92df0a7e44892d57ea8e78e681e63a9e6fc566fd4d0bbd185ee2d1755e01b0
+    // See https://github.com/dlang-community/dfmt/issues/253#issuecomment-1492709408
+
+    ImportInfoModule module_;
+
+    // TODO: Support selective import aliases
+    /// List of Selective Import bindings.
+    /// See_Also: https://dlang.org/spec/module.html#ImportBindings
+    /// See_Also: https://dlang.org/spec/module.html#selective_imports
+    string[] bindings;
+}
+
+/// See_Also: https://dlang.org/spec/module.html#Import
+struct ImportInfoModule
+{
+    // TODO: Make this non-nullable
+    string fullyQualifiedName;
+    string aliasIdentifier = null;
+}
+
 struct StructInitializerInfo
 {
     size_t startLocation;
@@ -325,7 +350,7 @@ final class FormatVisitor : ASTVisitor
     {
         if (invariant_.blockStatement !is null)
             astInformation.doubleNewlineLocations ~= invariant_.blockStatement.endLocation;
-        
+
         invariant_.accept(this);
     }
 
